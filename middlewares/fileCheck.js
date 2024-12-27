@@ -1,36 +1,44 @@
+import { log } from 'console';
 import path from 'path';
-
 
 const supportedExts = ['.png', '.jpg', '.webp', '.gif', '.jpeg', '.tsx'];
 
-
-//fileCheck for postFile
+// fileCheck for postFile
 export const fileCheck = (req, res, next) => {
   const file = req.files?.fileType;
 
-  if (!file) return res.status(400).json({ message: "please provide a valid file" });
+  if (!file) {
+
+    return res.status(400).json({ message: "please provide a valid file" });
+  }
 
   const type = path.extname(file.name);
+  console.log("type", type);
 
-  if (!supportedExts.includes(type)) return res.status(400).json({ message: 'please provide a valid file' })
+
+
+  if (!supportedExts.includes(type)) {
+    return res.status(400).json({ message: 'please provide a valid file' });
+  }
 
   file.mv(`./Uploads/${file.name}`, (err) => {
-    if (err) return res.status(400).json({ message: err.message });
+    if (err) {
+      console.error("Error moving file:", err.message);
+      return res.status(400).json({ message: err.message });
+    }
     req.fileType = file.name;
     next();
-  })
-
-
+  });
 }
 
 //updateFile for file
-
 export const updateFile = (req, res, next) => {
   const file = req.files?.fileType;
   if (!file) return next();
 
 
-  const type = path.extname(file.name)
+  const type = path.extname(file.name);
+  log("type", type);
 
   if (!supportedExts.includes(type)) return res.status(400).json({ message: 'please provide valid file' });
 
@@ -39,8 +47,4 @@ export const updateFile = (req, res, next) => {
     req.newfileType = file.name;
     next();
   })
-
-
-
-
 }
