@@ -13,7 +13,9 @@ const port = 9999;
 
 app.use(express.json());
 app.use(express.static('Uploads')); // Serves uploaded files
-app.use(fileUpload());
+app.use(fileUpload({
+  limits: { fileSize: 50 * 1024 * 1024 },
+}));
 
 app.use(cors({
   origin: true,

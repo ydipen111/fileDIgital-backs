@@ -1,6 +1,8 @@
-import mongoose from "mongoose";
+import mongoose, { mongo } from "mongoose";
 import File from "../models/File.js";
 import fs from 'fs';
+
+
 
 
 //getALl File
@@ -23,6 +25,25 @@ export const getFileController = async (req, res) => {
   }
 }
 
+//getFileById
+export const getFileByIdController = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      const file = await File.findById(id);
+      return res.status(200).json(file)
+    } else {
+      return res.status(404).json({ message: "file not found" })
+    }
+
+  } catch (error) {
+    return res.status(400).json({ message: `${error}` })
+
+  }
+}
+
+
 
 //postFile
 export const postFileController = async (req, res, next) => {
@@ -38,7 +59,7 @@ export const postFileController = async (req, res, next) => {
 
   } = req.body;
 
-  const oneYearAgo = new Date();
+  // const oneYearAgo = new Date();
 
 
   try {
