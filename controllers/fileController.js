@@ -9,12 +9,42 @@ import fs from 'fs';
 export const getFileController = async (req, res) => {
 
   try {
-    const files = await File.find();
-    console.log(files);
+
+    // helper constants 
+    const excludeFields = ['sort', 'search', 'page', 'limit', 'skip', 'fields'];
+    const queryObj = { ...req.query };
+
+
+    // remove unwanted fields
+    excludeFields.forEach(field => delete queryObj[field]);
+
+    //handle search
+    if (req.query.search) {
+      queryObj.name = { $regex: req.query.search, $options: 'i' }
+    }
+
+    // handle filtering operations
+    let queryStr = JSON.stringify(queryObj);
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt|eq)\b/g, match => `$${match}`);
+    let query = File.find(JSON.parse(queryStr));
+
+
+    // handle Pagination
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 7;
+    const skip = (page - 1) * limit;
+    const response = await query.skip(skip).limit(limit);
+
+
+    // console.log(files);
+
+
+
 
     return res.status(200).json({
+      length: response.length,
       message: "getting file data",
-      file: files
+      file: response
     })
 
 
