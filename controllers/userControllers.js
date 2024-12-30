@@ -47,6 +47,7 @@ export const loginController = async (req, res) => {
 
       return res.status(200).json({
         token: token,
+        id: isExist._id,
         email: isExist.email,
         isAdmin: isExist.isAdmin,
         message: 'login succesfull'

@@ -5,6 +5,7 @@ import fileRoutes from './routes/fileRoutes.js';
 import mongoose from "mongoose";
 import fileUpload from "express-fileupload";
 import archiveRoutes from "./routes/archiveRoutes.js";
+import connectDB from "./db.js";
 
 const app = express();
 const port = 9999;
@@ -20,11 +21,13 @@ app.use(cors({
   credentials: true,
 }));
 
-mongoose.connect('mongodb+srv://DipenDra:Dipendra123@cluster0.h9oaq.mongodb.net/file-Digitilization').then((val) => {
-  console.log("Connected to MongoDB");
-}).catch((err) => {
-  console.log(err);
-});
+connectDB();
+
+// mongoose.connect('mongodb+srv://DipenDra:Dipendra123@cluster0.h9oaq.mongodb.net/file-Digitilization').then((val) => {
+//   console.log("Connected to MongoDB");
+// }).catch((err) => {
+//   console.log(err);
+// });
 
 app.get('/', (req, res) => {
   return res.status(200).json({ message: "welcome to home page" });

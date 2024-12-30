@@ -29,7 +29,7 @@ export const fileCheck = (req, res, next) => {
 
   const uniqueName = `${Date.now()}${Filetype}`;
 
-  console.log(uploadPath);
+  // console.log(uploadPath);
 
 
   file.mv(`${uploadPath}/${uniqueName}`, (err) => {

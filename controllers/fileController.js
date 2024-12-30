@@ -1,6 +1,8 @@
 import mongoose, { mongo } from "mongoose";
 import File from "../models/File.js";
 import fs from 'fs';
+import jwt from 'jsonwebtoken';
+// import { JsonWebTokenError } from "jsonwebtoken";
 
 
 
@@ -36,7 +38,7 @@ export const getFileController = async (req, res) => {
     const response = await query.skip(skip).limit(limit);
 
 
-    // console.log(files);
+    console.log(response.length);
 
 
 
@@ -58,6 +60,7 @@ export const getFileController = async (req, res) => {
 //getFileById
 export const getFileByIdController = async (req, res) => {
   const { id } = req.params;
+  // const userId = req.user._id;
 
   try {
     if (mongoose.Types.ObjectId.isValid(id)) {
@@ -73,10 +76,37 @@ export const getFileByIdController = async (req, res) => {
   }
 }
 
+// get file by user
+export const getFileByUserIdController = async (req, res) => {
+  const userId = req.id;
+  console.log(userId);
+
+  try {
+    const files = await File.find({ userId: userId });
+    console.log(files);
+
+    return res.status(200).json({
+      message: 'get file by user',
+      files: files
+
+    })
+
+  } catch (error) {
+
+  }
+}
+
 
 
 //postFile
 export const postFileController = async (req, res, next) => {
+
+  // const { id } = req.userId;
+
+  const id = req.id;
+  const { authorization } = req.headers;
+  // console.log(authorization);
+  console.log(id);
   const {
     fileType,
     name,
@@ -85,7 +115,8 @@ export const postFileController = async (req, res, next) => {
     createdAt,
     archived,
     archivedAt,
-    isAdmin
+    isAdmin,
+    userId
 
   } = req.body;
 
@@ -93,6 +124,7 @@ export const postFileController = async (req, res, next) => {
 
 
   try {
+
 
     await File.create({
       fileType: req.fileType,
@@ -102,8 +134,8 @@ export const postFileController = async (req, res, next) => {
       createdAt,
       archived,
       archivedAt,
-      isAdmin
-
+      isAdmin,
+      userId: id
     })
     return res.status(200).json({
       message: "File uploaded succesfull",
@@ -204,19 +236,18 @@ export const deleteFile = async (req, res) => {
 
 }
 
-export const archiveOldFile = async () => {
-  const oneYearAgo = new Date();
-  // oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1)
 
+export const getUserFilesController = async (req, res) => {
   try {
+    // const userId = req.user._id; // Assuming user information is available in req.user
+    // const files = await File.find({ user: userId });
+
     return res.status(200).json({
-      message: "archivedOldFiles"
-    })
-
+      // length: files.length,
+      message: 'Getting user files',
+      // files: files
+    });
   } catch (error) {
-
+    return res.status(500).json({ message: 'Server error', error: error.message });
   }
-
-
-
-}
+};

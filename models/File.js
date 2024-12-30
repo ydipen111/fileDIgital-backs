@@ -34,14 +34,20 @@ const fileSchema = new mongoose.Schema({
 
   archivedAt: {
     type: Date,
-    default: false
+    default: null
   },
   isAdmin: {
     type: Boolean,
     default: false
 
+  },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
   }
-})
+});
 
-const File = mongoose.model('File', fileSchema);
+const File = mongoose.models.File || mongoose.model('File', fileSchema);
+
 export default File;

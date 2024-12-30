@@ -6,7 +6,6 @@ export const userCheck = (req, res, next) => {
   const decode = jwt.decode(authorization, 'token')
 
 
-
   if (decode) {
     req.id = decode.id;
     req.isAdmin = decode.isAdmin;
