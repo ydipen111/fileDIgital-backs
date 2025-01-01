@@ -2,6 +2,7 @@ import mongoose, { mongo } from "mongoose";
 import File from "../models/File.js";
 import fs from 'fs';
 import jwt from 'jsonwebtoken';
+import ArchivedFile from "../models/archivedFile.js";
 // import { JsonWebTokenError } from "jsonwebtoken";
 
 
@@ -56,6 +57,23 @@ export const getFileController = async (req, res) => {
 
   }
 }
+
+
+// getArciveController
+export const getArchiveControllerData = async (req, res) => {
+  try {
+    const archivedFiles = await ArchivedFile.find({});
+    console.log(archivedFiles);
+    return res.status(200).json({
+      message: 'get archive data',
+      data: archivedFiles
+    });
+  } catch (error) {
+    console.error('Error retrieving archived files:', error);
+    return res.status(500).json({ message: error.message });
+  }
+}
+
 
 //getFileById
 export const getFileByIdController = async (req, res) => {

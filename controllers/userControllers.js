@@ -20,7 +20,7 @@ export const loginController = async (req, res) => {
 
   try {
     const isExist = await User.findOne({ email: email });
-    console.log(isExist);
+    // console.log(isExist);
 
 
     if (isExist) {

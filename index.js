@@ -5,10 +5,15 @@ import fileRoutes from './routes/fileRoutes.js';
 import mongoose from "mongoose";
 import fileUpload from "express-fileupload";
 import archiveRoutes from "./routes/archiveRoutes.js";
+import ocr from "./routes/ocrRoutes.js";
 import connectDB from "./db.js";
+// import dotenv from 'dotenv';
+
+
 
 const app = express();
 const port = 9999;
+// dotenv.config();
 
 app.use(express.json());
 app.use(express.static('Uploads')); // Serves uploaded files
@@ -36,6 +41,7 @@ app.get('/', (req, res) => {
 app.use('/api/users', auth);
 app.use('/api/file', fileRoutes);
 app.use('/api/archive', archiveRoutes);
+app.use('/api/ocrd', ocr);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

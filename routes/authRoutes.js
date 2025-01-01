@@ -3,6 +3,7 @@ import { loginController, signupController, updateController, userLogout } from 
 import Joi from "joi";
 import validator from 'express-joi-validation'
 import { userCheck } from "../middlewares/auth.js";
+import { logger } from "../middlewares/logger.js";
 
 
 
@@ -22,7 +23,7 @@ const loginSchema = Joi.object({
   password: Joi.string().min(7).max(25).required()
 })
 
-router.route('/login').post(validate.body(loginSchema), loginController)
+router.route('/login').post(validate.body(loginSchema), logger, loginController)
 router.route('/signup').post(validate.body(signupSchema), signupController)
 router.route('/logout').post(userLogout)
 router.route('/update').patch(userCheck, updateController)

@@ -1,6 +1,20 @@
 import moment from 'moment';
-import File from '../models/file.js';
 import ArchivedFile from '../models/archivedFile.js';
+import File from '../models/file.js';
+
+export const testArchiveData = async (req, res) => {
+  try {
+    const AD = await File.find({ createdAt: { $lt: moment().subtract(1, 'minutes').toDate() } });
+    console.log(AD);
+
+    return res.status(200).json({
+      DATA: AD,
+      message: "Test Archive Data"
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
 
 export const archiveController = async (req, res) => {
   try {

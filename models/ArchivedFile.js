@@ -10,6 +10,6 @@ const ArchivedFileSchema = new mongoose.Schema({
   userId: mongoose.Schema.Types.ObjectId,
 });
 
-const ArchivedFile = mongoose.models.ArchivedFile || mongoose.model('ArchivedFile', ArchivedFileSchema);
+const ArchivedFile = mongoose.models.ArchivedFile || mongoose.model('ArchivedFile', ArchivedFileSchema, 'archived-data');
 
-export default ArchivedFile;
+export default ArchivedFile; 
